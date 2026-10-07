@@ -5,12 +5,16 @@ int main()
   int a = 1;
   int tmp = 0;
   int count = 1;
-  int result = 1;
+  int result = 0;
   //std::cout << count << "\n";
-  while (true)
+  do
   {
     std::cin >> a;
-    if (tmp == a && a != 0)
+    if (a == 0)
+    {
+      break;
+    }
+    if (tmp == a)
     {
       count++;
       if (count > result) 
@@ -19,13 +23,14 @@ int main()
       }
     } else {
       count = 1;
+      if (result == 0)
+      {
+        result = 1;
+      }
     }
+    
     tmp = a;
-    if (a == 0)
-    {
-      break;
-    }
     //std::cout << result << "\n";
-  }
+  } while (std::cin);
   std::cout << result << "\n";
 }
