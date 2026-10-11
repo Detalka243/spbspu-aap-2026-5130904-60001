@@ -9,6 +9,8 @@ int main()
   int result_EQL = 0;
   int count_MON = 1;
   int result_MON = 0;
+
+  bool first = true;
   //std::cout << count << "\n";
   while (std::cin >> a)
   {
@@ -17,23 +19,33 @@ int main()
     {
       break;
     }
+
     //4 задача
-    if (tmp == a)
+    if (first)
     {
-      count_EQL++;
-      if (count_EQL > result_EQL) 
-      {
-        result_EQL = count_EQL;
-      }
-    } else {
       count_EQL = 1;
-      if (result_EQL == 0)
+      result_EQL = 1;
+    }
+    else 
+    {
+      if (tmp == a)
       {
-        result_EQL = 1;
+        count_EQL++;
+        if (count_EQL > result_EQL) 
+        {
+          result_EQL = count_EQL;
+        }
+      } 
+      else 
+      {
+        count_EQL = 1;
       }
     }
+    //6 задача
+    
     
     tmp = a;
+    first = false;
     //std::cout << result << "\n";
     }
   }
