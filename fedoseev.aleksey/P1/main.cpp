@@ -6,12 +6,12 @@ int main()
   int tmp = 0;
 
   int count_EQL = 1;
-  int result_EQL = 0;
+  int result_EQL = -1;
   int count_MON = 1;
-  int result_MON = 0;
+  int result_MON = -1;
 
   bool first = true;
-  //std::cout << count << "\n";
+  
   while (std::cin >> a)
   {
 
@@ -65,9 +65,36 @@ int main()
        
     tmp = a;
     first = false;
-    //std::cout << result << "\n";
-    
   }
-  std::cout << "Результат EQL: " << result_EQL << "\n";
-  std::cout << "Результат MON: " << result_MON << "\n";
+  if (std::cin.fail() && !std::cin.eof())
+  {
+    std::cerr << "Bad input " << "\n";
+    return 1;
+  }
+
+  bool error = false;
+  if (result_EQL != -1)
+  {
+    std::cout << "Result EQL-SEQ: " << result_EQL << "\n";
+  }
+  else 
+  {
+    std::cerr << "Bad input" << "\n";
+    error = true;
+  }
+
+  if (result_EQL != -1)
+  {
+    std::cout << "Result MON-INC: " << result_MON << "\n";
+  }
+  else
+  {
+    std::cerr << "Bad input" << "\n";
+    error = true;
+  }
+
+  if (error)
+  {
+    return 2;
+  }
 }
