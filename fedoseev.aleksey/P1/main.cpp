@@ -46,7 +46,7 @@ int main()
       count_mon = 1;
       result_mon = 1;
     }
-    else 
+    else
     {
       if (a >= tmp)
       {
@@ -56,7 +56,7 @@ int main()
           result_mon = count_mon;
         }
       }
-      else 
+      else
       {
         count_mon = 1;
       }
