@@ -49,7 +49,7 @@ int main()
     }
     else 
     {
-      if (a > tmp)
+      if (a >= tmp)
       {
         ++count_MON;
         if (count_MON > result_MON)
@@ -66,7 +66,7 @@ int main()
     tmp = a;
     first = false;
     //std::cout << result << "\n";
-    }
+    
   }
   std::cout << "Результат EQL: " << result_EQL << "\n";
   std::cout << "Результат MON: " << result_MON << "\n";
