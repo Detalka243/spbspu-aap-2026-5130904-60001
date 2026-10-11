@@ -11,7 +11,7 @@ int main()
   int result_mon = -1;
 
   bool first = true;
-  
+
   while (std::cin >> a)
   {
 
@@ -40,7 +40,7 @@ int main()
         count_eql = 1;
       }
     }
-    
+
     if (first)
     {
       count_mon = 1;
