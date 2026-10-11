@@ -42,8 +42,27 @@ int main()
       }
     }
     //6 задача
-    
-    
+    if (first)
+    {
+      count_MON = 1;
+      result_MON = 1;
+    }
+    else 
+    {
+      if (a > tmp)
+      {
+        ++count_MON;
+        if (count_MON > result_MON)
+        {
+          result_MON = count_MON;
+        }
+      }
+      else 
+      {
+        count_MON = 1;
+      }
+    }
+       
     tmp = a;
     first = false;
     //std::cout << result << "\n";
