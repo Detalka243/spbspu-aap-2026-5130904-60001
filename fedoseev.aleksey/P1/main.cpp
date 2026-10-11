@@ -14,7 +14,6 @@ int main()
 
   while (std::cin >> a)
   {
-
     if (a == 0)
     {
       break;
