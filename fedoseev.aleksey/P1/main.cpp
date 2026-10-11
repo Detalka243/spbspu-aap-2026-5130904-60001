@@ -4,33 +4,39 @@ int main()
 {
   int a = 1;
   int tmp = 0;
-  int count = 1;
-  int result = 0;
+
+  int count_EQL = 1;
+  int result_EQL = 0;
+  int count_MON = 1;
+  int result_MON = 0;
   //std::cout << count << "\n";
-  do
+  while (std::cin >> a)
   {
-    std::cin >> a;
+
     if (a == 0)
     {
       break;
     }
+    //4 задача
     if (tmp == a)
     {
-      count++;
-      if (count > result) 
+      count_EQL++;
+      if (count_EQL > result_EQL) 
       {
-        result = count;
+        result_EQL = count_EQL;
       }
     } else {
-      count = 1;
-      if (result == 0)
+      count_EQL = 1;
+      if (result_EQL == 0)
       {
-        result = 1;
+        result_EQL = 1;
       }
     }
     
     tmp = a;
     //std::cout << result << "\n";
-  } while (std::cin);
-  std::cout << result << "\n";
+    }
+  }
+  std::cout << "Результат EQL: " << result_EQL << "\n";
+  std::cout << "Результат MON: " << result_MON << "\n";
 }
