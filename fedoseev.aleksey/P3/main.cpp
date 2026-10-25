@@ -8,7 +8,7 @@ void processMatrix(int * matrix, size_t rows, size_t cols)
   size_t bottom = rows - 1;
   size_t left = 0;
   size_t right = cols - 1;
-  while (bottom <= top && left <= right)
+  while (top <= bottom && left <= right)
   {
     for (size_t i = bottom; i > top; --i) 
     {
@@ -35,7 +35,7 @@ void processMatrix(int * matrix, size_t rows, size_t cols)
     {
       for (size_t i = right; i > left; --i)
       {
-        matrix[cols * right + i] -= k;
+        matrix[cols * bottom + i] -= k;
         ++k;
       }
       --bottom;
@@ -113,13 +113,13 @@ int main(int argc, char* argv[])
 
   int * matrix = nullptr;
   bool dynamic = false;
+  int staticMatrix[maxSize] = {};
   if (num == 1) 
   {
     if (rows * cols > maxSize) 
     {
       std::cerr << "Matrix is too large\n";
     }
-    int staticMatrix[maxSize] = {};
     matrix = staticMatrix;
   } else {
     matrix = new int [rows * cols];
@@ -178,3 +178,4 @@ int main(int argc, char* argv[])
     delete [] matrix;
   }
 }
+
