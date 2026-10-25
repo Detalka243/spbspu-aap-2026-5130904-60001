@@ -16,7 +16,7 @@ void processMatrix(int * matrix, size_t rows, size_t cols)
       ++k;
     }
     ++left;
-    for (size_t i = left; i < right; ++i) 
+    for (size_t i = left; i <= right; ++i) 
     {
       matrix[top * cols + i] -= k;
       ++k;
@@ -24,7 +24,7 @@ void processMatrix(int * matrix, size_t rows, size_t cols)
     ++top;
     if (top <= bottom) 
     {
-      for (size_t i = top; i < bottom; ++i)
+      for (size_t i = top; i <= bottom; ++i)
       {
         matrix[i * cols + right] -= k;
         ++k;
@@ -44,9 +44,9 @@ void processMatrix(int * matrix, size_t rows, size_t cols)
 }
 bool checkLowerTriangular(const int * matrix, size_t rows, size_t cols)
 {
-  for (size_t i = 0; i < cols - 1; ++i)
+  for (size_t i = 0; i < rows; ++i)
   {
-    for (size_t j = 1; i < rows; ++j) 
+    for (size_t j = i + 1; j < cols; ++j) 
     {
       if (matrix[i * cols + j] != 0) 
       {
@@ -55,7 +55,6 @@ bool checkLowerTriangular(const int * matrix, size_t rows, size_t cols)
     }
   }
   return true;
-
 }
 
 
@@ -70,7 +69,9 @@ int main(int argc, char* argv[])
   if (argc > 4)
   {
     std::cerr << "Too many arguments\n";
+    return 1;
   }
+
   int num = 0;
   try 
   {
@@ -78,15 +79,17 @@ int main(int argc, char* argv[])
     if (num > 2 || num < 1) 
     {
       std::cerr << "First parameter is out of range\n";
+      return 1;
+    } 
   } catch (...) {
-    std::cerr << "\n";
+    std::cerr << "First parametr is not a number\n";
     return 1;
   }
 
   std::ifstream fin(argv[2]);
   if (!fin.is_open()) 
   {
-    std::cerr << "\n";
+    std::cerr << "Cannot open input file\n";
     return 2;
   }
 
@@ -94,50 +97,74 @@ int main(int argc, char* argv[])
   size_t cols = 0;
   
   if (!(fin >> rows >> cols)) {
-    std::cerr << "\n";
+    std::cerr << "Cannot read file\n";
     return 2;
   }
   if (rows == 0 || cols == 0) 
   {
     std::ofstream fout(argv[3]);
     if (!fout.is_open()) {
-      std::cerr << "\n";
+      std::cerr << "Cannot open output file\n";
       return 2;
     }
-    fout << "0 0";
+    fout << "0 0\n";
     return 0;
   }
 
   int * matrix = nullptr;
-
+  bool dynamic = false;
   if (num == 1) 
   {
+    if (rows * cols > maxSize) 
+    {
+      std::cerr << "Matrix is too large\n";
+    }
     int staticMatrix[maxSize] = {};
-    matrix = statisMatrix;
+    matrix = staticMatrix;
   } else {
     matrix = new int [rows * cols];
+    dynamic = true;
   }
+
   for (int i = 0; i < rows; ++i) 
   {
     for (int j = 0; j < cols; ++j) 
     {
       int value = 0;
-      if (!(fin >> value)) {
-        std::cerr << "\n";
+      if (!(fin >> value)) 
+      {
+        std::cerr << "Invalid input\n";
+        if (dynamic) 
+        {
+          delete [] matrix;
+        }
+        return 2;
       }
       matrix[i * cols + j] = value;
     }
   }
 
   fin.close();
+  bool isLower = checkLowerTriangular(matrix, rows, cols);
+  processMatrix(matrix, rows, cols);
 
   std::ofstream fout(argv[3]);
   if (!fout.is_open()) {
-    std::cerr << "\n";
+    std::cerr << "Cannot open output file\n";
+    if (dynamic)
+    {
+      delete [] matrix;
+    }
     return 2;
   }
 
   fout << rows << " " << cols << " ";
+  if (isLower) 
+  {
+    std::cout << "true\n";
+  } else {
+    std::cout << "false\n";
+  }
   for (int i = 0; i < rows; ++i) 
   {
     for (int j = 0; j < cols; ++j) 
@@ -145,6 +172,9 @@ int main(int argc, char* argv[])
       fout << matrix[i * cols + j] << " ";
     }
   }
-
   fout.close();
+  if (dynamic) 
+  {
+    delete [] matrix;
+  }
 }
