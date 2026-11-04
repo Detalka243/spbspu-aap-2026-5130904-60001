@@ -2,96 +2,66 @@
 
 int main()
 {
-  int a = 1;
+  int element = 0;
   int tmp = 0;
 
-  int count_eql = 1;
-  int result_eql = -1;
-  int count_mon = 1;
-  int result_mon = -1;
-
-  bool first = true;
-
-  while (std::cin >> a)
+  size_t count_eql = 1;
+  size_t result_eql = 0;
+  size_t count_mon = 1;
+  size_t result_mon = 0;
+  size_t count_element = 0;
+  std::cin >> element;
+  if (element != 0)
   {
-    if (a == 0)
+    count_element++;
+    result_eql = 1;
+    result_mon = 1;
+  }
+  tmp = element;
+  while (element != 0 && std::cin >> element)
+  {
+    if (tmp == element)
     {
-      break;
+      count_eql++;
+      if (count_eql > result_eql)
+      {
+        result_eql = count_eql;
+      }
     }
-
-    if (first)
+    else
     {
       count_eql = 1;
-      result_eql = 1;
-    }
-    else
-    {
-      if (tmp == a)
-      {
-        count_eql++;
-        if (count_eql > result_eql)
-        {
-          result_eql = count_eql;
-        }
-      }
-      else
-      {
-        count_eql = 1;
-      }
     }
 
-    if (first)
+    if (element >= tmp)
     {
-      count_mon = 1;
-      result_mon = 1;
+      ++count_mon;
+      if (count_mon > result_mon)
+      {
+        result_mon = count_mon;
+      }
     }
     else
     {
-      if (a >= tmp)
-      {
-        ++count_mon;
-        if (count_mon > result_mon)
-        {
-          result_mon = count_mon;
-        }
-      }
-      else
-      {
-        count_mon = 1;
-      }
+      count_mon = 1;
     }
-    tmp = a;
-    first = false;
+    tmp = element;
   }
   if (std::cin.fail() && !std::cin.eof())
   {
-    std::cerr << "Bad input " << "\n";
+    std::cerr << "Bad input" << "\n";
     return 1;
   }
-
-  bool error = false;
-  if (result_eql != -1)
+  
+  int exit_code = 0;
+  if (count_element == 0)
   {
-    std::cout << "Result EQL-SEQ: " << result_eql << "\n";
-  }
-  else
-  {
-    std::cerr << "Bad input" << "\n";
-    error = true;
+    std::cerr << "Bad input\n";
+    exit_code = 2;
   }
 
-  if (result_mon != -1)
-  {
-    std::cout << "Result MON-INC: " << result_mon << "\n";
-  }
-  else
-  {
-    std::cerr << "Bad input" << "\n";
-    error = true;
-  }
-
-  if (error)
-  {
-    return 2;
-  }
+  std::cout << "Result EQL-SEQ: " << result_eql << "\n";
+  std::cout << "Result MON-INC: " << result_mon << "\n";
+  
+  return exit_code;
 }
