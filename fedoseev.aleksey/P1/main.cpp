@@ -52,7 +52,6 @@ int main()
     std::cerr << "Bad input" << "\n";
     return 1;
   }
-  
   int exit_code = 0;
   if (count_element == 0)
   {
@@ -62,6 +61,5 @@ int main()
 
   std::cout << "Result EQL-SEQ: " << result_eql << "\n";
   std::cout << "Result MON-INC: " << result_mon << "\n";
-  
   return exit_code;
 }
