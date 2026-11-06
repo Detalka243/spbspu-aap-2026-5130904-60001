@@ -1,65 +1,68 @@
 #include <iostream>
 #include <fstream>
-
-void processMatrix(int * matrix, size_t rows, size_t cols)
+#include <cstdlib>
+namespace fedoseev 
 {
-  int k = 1;
-  size_t top = 0;
-  size_t bottom = rows - 1;
-  size_t left = 0;
-  size_t right = cols - 1;
-  while (top <= bottom && left <= right)
+  void processMatrix(int * matrix, size_t rows, size_t cols)
   {
-    for (size_t i = bottom; i > top; --i) 
+    int k = 1;
+    size_t top = 0;
+    size_t bottom = rows - 1;
+    size_t left = 0;
+    size_t right = cols - 1;
+    while (top <= bottom && left <= right)
     {
-      matrix[i * cols + left] -= k;
-      ++k;
-    }
-    ++left;
-    for (size_t i = left; i <= right; ++i) 
-    {
-      matrix[top * cols + i] -= k;
-      ++k;
-    }
-    ++top;
-    if (top <= bottom) 
-    {
-      for (size_t i = top; i <= bottom; ++i)
+      for (size_t i = bottom; i > top; --i) 
       {
-        matrix[i * cols + right] -= k;
+        matrix[i * cols + left] -= k;
         ++k;
       }
-      --right;
-    }
-    if (left <= right)
-    {
-      for (size_t i = right; i > left; --i)
+      ++left;
+      for (size_t i = left; i <= right; ++i) 
       {
-        matrix[cols * bottom + i] -= k;
+        matrix[top * cols + i] -= k;
         ++k;
       }
-      --bottom;
-    }
-  }
-}
-bool checkLowerTriangular(const int * matrix, size_t rows, size_t cols)
-{
-  for (size_t i = 0; i < rows; ++i)
-  {
-    for (size_t j = i + 1; j < cols; ++j) 
-    {
-      if (matrix[i * cols + j] != 0) 
+      ++top;
+      if (top <= bottom) 
       {
-        return false;
+        for (size_t i = top; i <= bottom; ++i)
+        {
+          matrix[i * cols + right] -= k;
+          ++k;
+        }
+        --right;
+      }
+      if (left <= right)
+      {
+        for (size_t i = right; i > left; --i)
+        {
+          matrix[cols * bottom + i] -= k;
+          ++k;
+        }
+        --bottom;
       }
     }
   }
-  return true;
+  bool checkLowerTriangular(const int * matrix, size_t rows, size_t cols)
+  {
+    for (size_t i = 0; i < rows; ++i)
+    {
+      for (size_t j = i + 1; j < cols; ++j) 
+      {
+        if (matrix[i * cols + j] != 0) 
+        {
+          return false;
+        } 
+      }
+    }
+    return true;
+  }
 }
-
 
 int main(int argc, char* argv[])
 {
+  using namespace fedoseev;
   const size_t maxSize = 10000;
   if (argc < 4) 
   {
@@ -72,10 +75,10 @@ int main(int argc, char* argv[])
     return 1;
   }
 
-  int num = 0;
-  try 
+  long num = 0;
+  try
   {
-    num = std::stoi(argv[1]);
+    num = std::strtol(argv[1], nullptr, 10);
     if (num > 2 || num < 1) 
     {
       std::cerr << "First parameter is out of range\n";
@@ -85,7 +88,6 @@ int main(int argc, char* argv[])
     std::cerr << "First parametr is not a number\n";
     return 1;
   }
-
   std::ifstream fin(argv[2]);
   if (!fin.is_open()) 
   {
@@ -112,18 +114,18 @@ int main(int argc, char* argv[])
   }
 
   int * matrix = nullptr;
-  bool dynamic = false;
-  int staticMatrix[maxSize] = {};
+  int * dynamic = nullptr;
+  int fixedMatrix[maxSize] = {};
   if (num == 1) 
   {
     if (rows * cols > maxSize) 
     {
       std::cerr << "Matrix is too large\n";
     }
-    matrix = staticMatrix;
+    matrix = fixedMatrix;
   } else {
-    matrix = new int [rows * cols];
-    dynamic = true;
+    matrix = new int[rows * cols];
+    dynamic = matrix;
   }
 
   for (int i = 0; i < rows; ++i) 
@@ -134,10 +136,7 @@ int main(int argc, char* argv[])
       if (!(fin >> value)) 
       {
         std::cerr << "Invalid input\n";
-        if (dynamic) 
-        {
-          delete [] matrix;
-        }
+        delete [] dynamic;
         return 2;
       }
       matrix[i * cols + j] = value;
@@ -151,31 +150,24 @@ int main(int argc, char* argv[])
   std::ofstream fout(argv[3]);
   if (!fout.is_open()) {
     std::cerr << "Cannot open output file\n";
-    if (dynamic)
-    {
-      delete [] matrix;
-    }
+    delete [] dynamic;
     return 2;
   }
 
   fout << rows << " " << cols << " ";
-  if (isLower) 
-  {
-    std::cout << "true\n";
-  } else {
-    std::cout << "false\n";
-  }
-  for (int i = 0; i < rows; ++i) 
-  {
-    for (int j = 0; j < cols; ++j) 
-    {
-      fout << matrix[i * cols + j] << " ";
-    }
-  }
-  fout.close();
-  if (dynamic) 
-  {
-    delete [] matrix;
-  }
-}
+  std::cout << std::boolalpha;
+  std::cout << isLower << "\n";
+  std::cout << std::noboolalpha;
 
+  std::cout << matrix[0];
+  fout << matrix[0];
+  for (size_t i = 1; i < rows * cols; ++i)
+  {
+    fout << " " << matrix[i];
+    std::cout << " " << matrix[i];
+  }
+  fout << "\n";
+  std::cout << "\n";
+  fout.close();
+  delete [] dynamic;
+}
