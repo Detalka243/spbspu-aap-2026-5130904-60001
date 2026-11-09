@@ -3,6 +3,26 @@
 
 namespace fedoseev
 {
+  char * expand(const char * str, size_t old_size, size_t new_size)
+  {
+    char * result = (char *)malloc(sizeof(char) * new_size);
+    if (!result)
+    {
+      return nullptr;
+    }
+    size_t i = 0;
+    for (; str[i] != '\0'; ++i)
+    {
+      result[i] = str[i];
+    }
+    result[i] = '\0';
+
+    return result;
+  }
+  char * read_line(const char * str)
+  {
+    
+  }
   void uni_two(const char * str1, const char * str2, char * result)
   {
     size_t index = 0;
@@ -45,5 +65,5 @@ namespace fedoseev
 }
 int main()
 {
-
+  
 }
