@@ -3,11 +3,12 @@
 
 namespace fedoseev
 {
-  char * expand(const char * str, size_t old_size, size_t new_size)
+  char * expand(const char * str, size_t new_size)
   {
     char * result = (char *)malloc(sizeof(char) * new_size);
     if (!result)
     {
+      std::cerr << "Memory allocation error\n";
       return nullptr;
     }
     size_t i = 0;
@@ -21,7 +22,35 @@ namespace fedoseev
   }
   char * read_line(const char * str)
   {
-    
+    size_t default_capacity = 16;
+    size_t capacity = default_capacity;
+    char * result = (char *)malloc(sizeof(char) * default_capacity);
+    if (!result)
+    {
+      std::cerr << "Memory allocation error\n";
+      return nullptr; 
+    }
+    char symbol;
+    size_t i = 0;
+    while (std::cin.get(symbol) && symbol != '\0')
+    {
+      if (i + 1 >= capacity)
+      {
+        capacity *= 2;
+        result[i] = '\0';
+        char * temp = result;
+        result = expand(temp, capacity);
+        if (!result)
+        {
+          free(temp);
+          return nullptr;
+        }
+        free(temp);
+      }
+      result[i++] = symbol;
+    }
+    result[i] = '\0';
+    return result;
   }
   void uni_two(const char * str1, const char * str2, char * result)
   {
